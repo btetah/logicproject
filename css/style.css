@@ -1,0 +1,1290 @@
+/* ============================================
+   DTK02 Digital IC Trainer Kit - Realistic UI
+   Matches the physical DTK-02 device appearance
+   Dark panel, grey enclosure, horizontal layout
+   ============================================ */
+
+/* Reset & Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1a1a1e;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+/* ============================
+   Trainer Kit Container
+   ============================ */
+.trainer-kit {
+    width: 100%;
+    max-width: 1400px;
+}
+
+/* ============================
+   Grey Metal Enclosure Frame
+   ============================ */
+.enclosure-frame {
+    background: linear-gradient(180deg, #b8b4aa, #9e998e, #a8a49a);
+    border-radius: 8px;
+    border: 2px solid #7a756a;
+    box-shadow:
+        0 10px 40px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        inset 0 -1px 0 rgba(0,0,0,0.2);
+    padding: 10px;
+    overflow: hidden;
+}
+
+/* ============================
+   Title Label Strip
+   ============================ */
+.title-bar {
+    background: linear-gradient(180deg, #1a3a6e, #0d2240);
+    padding: 8px 20px;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 2px solid #0a1830;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.title-bar-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.kit-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #a8c8ff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.kit-model {
+    font-size: 1.6em;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 3px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* ============================
+   Main Dark Panel (the black face plate)
+   ============================ */
+.main-panel {
+    background: #1e1e22;
+    border-radius: 0 0 4px 4px;
+    border: 1px solid #333;
+    padding: 10px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* ============================
+   Section Labels (white on dark)
+   ============================ */
+.section-label {
+    font-size: 0.6em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.ctrl-label {
+    font-size: 0.55em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* ============================
+   Panel Sections (bordered areas on dark panel)
+   ============================ */
+.panel-section {
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 3px;
+    padding: 8px 10px;
+    position: relative;
+}
+
+.panel-section .section-label {
+    position: absolute;
+    top: -7px;
+    left: 8px;
+    background: #1e1e22;
+    padding: 0 6px;
+    font-size: 0.6em;
+}
+
+/* ============================
+   Top Control Strip
+   ============================ */
+.control-strip {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+/* Power Supply */
+.power-section {
+    flex: 0 0 auto;
+    min-width: 300px;
+}
+
+.power-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 4px;
+}
+
+.power-switch-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.power-led-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+/* Rocker Switch (Power) */
+.rocker-switch {
+    width: 40px;
+    height: 22px;
+    background: #333;
+    border-radius: 4px;
+    border: 2px solid #555;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+    user-select: none;
+}
+
+.rocker-label-on,
+.rocker-label-off {
+    font-size: 0.55em;
+    font-weight: bold;
+    color: #888;
+    z-index: 1;
+}
+
+.rocker-thumb {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 16px;
+    height: 14px;
+    background: linear-gradient(180deg, #888, #666);
+    border-radius: 2px;
+    transition: right 0.15s, left 0.15s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.toggle-switch[data-state="on"] .rocker-thumb {
+    right: auto;
+    left: 2px;
+    background: linear-gradient(180deg, #aaa, #888);
+}
+
+.state-label {
+    font-size: 0.65em;
+    font-weight: bold;
+    color: rgba(255,255,255,0.7);
+    min-width: 22px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Power LED */
+.power-led {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    transition: all 0.3s;
+}
+
+.power-led.on {
+    background: #00ff00;
+    box-shadow: 0 0 8px #00ff00, 0 0 16px rgba(0,255,0,0.4);
+    border-color: #00cc00;
+}
+
+/* Banana Jack Terminals */
+.voltage-terminals {
+    display: flex;
+    gap: 12px;
+}
+
+.terminal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.banana-jack {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.3);
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 -2px 3px rgba(0,0,0,0.2);
+}
+
+.banana-jack::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.4);
+}
+
+.banana-jack.red {
+    background: radial-gradient(circle at 35% 35%, #ff6b6b, #cc0000);
+    border-color: #990000;
+}
+
+.banana-jack.orange {
+    background: radial-gradient(circle at 35% 35%, #ffaa55, #cc6600);
+    border-color: #994400;
+}
+
+.banana-jack.blue {
+    background: radial-gradient(circle at 35% 35%, #6699ff, #0044cc);
+    border-color: #003399;
+}
+
+.banana-jack.black {
+    background: radial-gradient(circle at 35% 35%, #555, #111);
+    border-color: #000;
+}
+
+/* ============================
+   Toggle Switch (Generic)
+   ============================ */
+.toggle-switch {
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-track {
+    width: 36px;
+    height: 18px;
+    background: #444;
+    border-radius: 9px;
+    position: relative;
+    transition: background 0.2s;
+    border: 1px solid #555;
+}
+
+.toggle-thumb {
+    width: 14px;
+    height: 14px;
+    background: linear-gradient(180deg, #ccc, #999);
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    transition: left 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.toggle-switch[data-state="on"] .toggle-track {
+    background: #00b894;
+    border-color: #00a884;
+}
+
+.toggle-switch[data-state="on"] .toggle-thumb {
+    left: 19px;
+    background: linear-gradient(180deg, #fff, #ddd);
+}
+
+/* ============================
+   Clock Generator
+   ============================ */
+.clock-section {
+    flex: 1;
+    min-width: 280px;
+}
+
+.clock-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 4px;
+    flex-wrap: wrap;
+}
+
+.clock-indicators {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.clock-led-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.clock-led {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    transition: all 0.05s;
+}
+
+.clock-led.on {
+    background: #ffcc00;
+    box-shadow: 0 0 6px #ffaa00;
+    border-color: #cc8800;
+}
+
+.clock-output-point {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #555;
+    border: 1px solid #888;
+    cursor: pointer;
+}
+
+.freq-buttons {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+.freq-btn {
+    padding: 3px 6px;
+    background: #2a2a30;
+    color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.6em;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    transition: all 0.15s;
+    user-select: none;
+}
+
+.freq-btn:hover {
+    background: #3a3a44;
+    border-color: rgba(255,255,255,0.4);
+}
+
+.freq-btn.active {
+    background: #1a3a6e;
+    border-color: #5588cc;
+    color: #aaccff;
+    box-shadow: 0 0 4px rgba(85,136,204,0.4);
+}
+
+.freq-display {
+    text-align: center;
+    font-size: 0.65em;
+    color: #ffcc44;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+}
+
+.clock-toggle-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ============================
+   Pulse Generator
+   ============================ */
+.pulse-section {
+    flex: 0 0 auto;
+    min-width: 110px;
+}
+
+.pulse-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 4px;
+}
+
+.pulser-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.pulser-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid;
+    cursor: pointer;
+    transition: all 0.1s;
+    user-select: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.pulser-lh {
+    background: radial-gradient(circle at 35% 35%, #4ade80, #16a34a);
+    border-color: #15803d;
+}
+
+.pulser-lh:active {
+    background: radial-gradient(circle at 35% 35%, #86efac, #22c55e);
+    transform: scale(0.92);
+    box-shadow: 0 0 8px rgba(34,197,94,0.5);
+}
+
+.pulser-hl {
+    background: radial-gradient(circle at 35% 35%, #f87171, #dc2626);
+    border-color: #b91c1c;
+}
+
+.pulser-hl:active {
+    background: radial-gradient(circle at 35% 35%, #fca5a5, #ef4444);
+    transform: scale(0.92);
+    box-shadow: 0 0 8px rgba(239,68,68,0.5);
+}
+
+.pulser-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* ============================
+   Logic Probe
+   ============================ */
+.probe-section {
+    flex: 0 0 auto;
+    min-width: 150px;
+}
+
+.probe-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 4px;
+}
+
+.probe-input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.probe-input-point {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #444;
+    border: 2px solid #777;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.probe-input-point:hover {
+    background: #5588cc;
+    border-color: #3366aa;
+}
+
+.probe-indicators {
+    display: flex;
+    gap: 8px;
+}
+
+.probe-led-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.probe-led {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    transition: all 0.15s;
+}
+
+.probe-high-led.on {
+    background: #00ff00;
+    box-shadow: 0 0 6px #00ff00;
+    border-color: #00cc00;
+}
+
+.probe-low-led.on {
+    background: #ff4444;
+    box-shadow: 0 0 6px #ff4444;
+    border-color: #cc0000;
+}
+
+.probe-tri-led.on {
+    background: #ffcc44;
+    box-shadow: 0 0 6px #ffcc44;
+    border-color: #cc9900;
+}
+
+/* ============================
+   OUTPUT Strip (Horizontal LED Row - Top)
+   ============================ */
+.output-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255,80,80,0.3);
+    border-radius: 4px;
+    padding: 6px 12px;
+    background: rgba(255,80,80,0.03);
+}
+
+.strip-label-box {
+    flex: 0 0 auto;
+}
+
+.strip-label {
+    font-size: 0.75em;
+    font-weight: 900;
+    color: #ff6666;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+    writing-mode: horizontal-tb;
+}
+
+.leds-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: center;
+}
+
+.logic-led {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 6px;
+}
+
+.led-indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    border: 2px solid #444;
+    transition: all 0.15s;
+}
+
+.led-indicator.on {
+    background: #ff3333;
+    box-shadow: 0 0 10px #ff3333, 0 0 20px rgba(255,50,50,0.3);
+    border-color: #cc0000;
+}
+
+.led-label {
+    font-size: 0.6em;
+    font-weight: bold;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Courier New', monospace;
+}
+
+.led-state {
+    font-size: 0.55em;
+    font-weight: bold;
+    padding: 1px 3px;
+    border-radius: 2px;
+    font-family: 'Courier New', monospace;
+}
+
+.led-state.high {
+    background: rgba(255,60,60,0.2);
+    color: #ff6666;
+}
+
+.led-state.low {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+}
+
+.led-input-point {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #444;
+    border: 1px solid #777;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+/* ============================
+   CIRCUIT Area (IC Sockets + Breadboard - Center)
+   ============================ */
+.circuit-area {
+    position: relative;
+    border: 1px solid rgba(0,200,255,0.25);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: rgba(0,200,255,0.02);
+}
+
+.circuit-label-box {
+    position: absolute;
+    top: -8px;
+    left: 16px;
+    background: #1e1e22;
+    padding: 0 8px;
+}
+
+.circuit-label {
+    font-size: 0.7em;
+    font-weight: 900;
+    color: #44ccff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+}
+
+/* IC Sockets Area */
+.ic-sockets-area {
+    margin-bottom: 10px;
+}
+
+.ic-sockets-area .section-label {
+    margin-bottom: 4px;
+}
+
+.ic-sockets-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.socket-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.dip-socket {
+    background: #111;
+    border: 1px solid #444;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
+}
+
+.dip-socket span {
+    font-size: 0.5em;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Courier New', monospace;
+}
+
+.dip-notch {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 3px;
+    background: #222;
+    border-radius: 0 0 3px 3px;
+    border: 1px solid #555;
+    border-top: none;
+}
+
+.dip-14 {
+    width: 42px;
+    height: 24px;
+}
+
+.dip-16 {
+    width: 46px;
+    height: 24px;
+}
+
+.dip-20 {
+    width: 54px;
+    height: 24px;
+}
+
+/* Breadboard */
+.breadboard-area {
+    position: relative;
+}
+
+.breadboard {
+    background: #f8f4ec;
+    border-radius: 4px;
+    padding: 6px;
+    min-height: 300px;
+    border: 2px solid #c8c0a8;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Power Rails */
+.power-rail {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 0;
+    margin-bottom: 4px;
+}
+
+.bottom-rail {
+    margin-bottom: 0;
+    margin-top: 4px;
+}
+
+.rail-label-mark {
+    font-size: 0.7em;
+    font-weight: 900;
+    min-width: 12px;
+    text-align: center;
+    line-height: 1;
+}
+
+.red-mark {
+    color: #cc0000;
+}
+
+.blue-mark {
+    color: #0044cc;
+}
+
+.rail-holes {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+.rail-hole {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #bbb;
+    border: 1px solid #999;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.rail-hole:hover {
+    background: #5588cc;
+}
+
+.rail-hole.vcc {
+    border-color: #cc6666;
+}
+
+.rail-hole.gnd {
+    border-color: #6666cc;
+}
+
+/* Main Grid */
+.bb-main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 3px 0;
+}
+
+.bb-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.bb-row-label {
+    font-size: 0.5em;
+    font-weight: bold;
+    color: #888;
+    min-width: 14px;
+    text-align: center;
+}
+
+.bb-col-labels {
+    display: flex;
+    gap: 2px;
+    padding-left: 16px;
+}
+
+.bb-col-label {
+    width: 7px;
+    font-size: 0.45em;
+    color: #999;
+    text-align: center;
+}
+
+.bb-hole {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #bbb;
+    border: 1px solid #999;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.bb-hole:hover {
+    background: #5588cc;
+}
+
+.bb-hole.occupied {
+    background: #555;
+    border-color: #333;
+}
+
+.bb-hole.connected {
+    background: #eebb44;
+    border-color: #cc9922;
+}
+
+.bb-hole.selected {
+    background: #ee4444;
+    border-color: #cc2222;
+    box-shadow: 0 0 4px #ee4444;
+}
+
+.bb-center-gap {
+    width: 7px;
+    height: 7px;
+}
+
+/* IC on breadboard */
+.ic-on-board {
+    position: absolute;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 2px;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.5em;
+    text-align: center;
+    padding: 1px;
+    pointer-events: none;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    font-family: 'Courier New', monospace;
+}
+
+.ic-on-board .ic-notch {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 3px;
+    background: #222;
+    border-radius: 0 0 3px 3px;
+    border: 1px solid #444;
+    border-top: none;
+}
+
+/* Wire Overlay */
+.wire-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.wire-overlay line {
+    stroke-width: 2;
+    stroke-linecap: round;
+    pointer-events: stroke;
+    cursor: pointer;
+}
+
+.wire-overlay line:hover {
+    stroke-width: 4;
+}
+
+/* ============================
+   INPUT Strip (Horizontal Switch Row - Bottom)
+   ============================ */
+.input-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255,0,255,0.25);
+    border-radius: 4px;
+    padding: 6px 12px;
+    background: rgba(255,0,255,0.03);
+}
+
+.input-strip .strip-label {
+    color: #dd66dd;
+}
+
+.switches-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: center;
+}
+
+.logic-switch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 3px 4px;
+}
+
+.switch-label {
+    font-size: 0.6em;
+    font-weight: bold;
+    color: rgba(255,255,255,0.85);
+    font-family: 'Courier New', monospace;
+}
+
+.switch-led-low,
+.switch-led-high {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    transition: all 0.15s;
+}
+
+.switch-led-low.on {
+    background: #ff4444;
+    box-shadow: 0 0 4px #ff4444;
+    border-color: #cc0000;
+}
+
+.switch-led-high.on {
+    background: #00ff00;
+    box-shadow: 0 0 4px #00ff00;
+    border-color: #00cc00;
+}
+
+.switch-state {
+    font-size: 0.55em;
+    font-weight: bold;
+    min-width: 12px;
+    padding: 1px 3px;
+    border-radius: 2px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+.switch-state.high {
+    background: rgba(0,255,0,0.2);
+    color: #66ff66;
+}
+
+.switch-state.low {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+}
+
+.switch-output-point {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #444;
+    border: 1px solid #777;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.switch-output-point.high {
+    background: #00cc88;
+    box-shadow: 0 0 4px #00cc88;
+}
+
+/* ============================
+   Bottom Strip: Seven Segment + IC Library
+   ============================ */
+.bottom-strip {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Seven Segment Section */
+.seven-seg-section {
+    flex: 0 0 auto;
+    min-width: 220px;
+}
+
+.seven-seg-container {
+    display: flex;
+    gap: 12px;
+    padding-top: 4px;
+    justify-content: center;
+}
+
+.seven-seg-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.seven-seg-display {
+    background: #0a0a0a;
+    border-radius: 3px;
+    padding: 5px;
+    border: 1px solid #333;
+    width: 50px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.seg-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.segment {
+    fill: #1a1a1a;
+    stroke: #0a0a0a;
+    stroke-width: 0.5;
+    transition: fill 0.1s;
+}
+
+.segment.on {
+    fill: #ff2222;
+    filter: drop-shadow(0 0 3px #ff2222);
+}
+
+.seg-pins {
+    display: flex;
+    gap: 2px;
+    font-size: 0.45em;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Courier New', monospace;
+}
+
+/* IC Library */
+.ic-library-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+.ic-library-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 4px;
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.ic-chip-btn {
+    padding: 4px 8px;
+    background: #252530;
+    color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.65em;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 72px;
+}
+
+.ic-chip-btn:hover {
+    background: #1a3a6e;
+    border-color: #5588cc;
+    transform: translateY(-1px);
+}
+
+.ic-chip-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ic-chip-btn .ic-name {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #aaccff;
+    font-family: 'Courier New', monospace;
+}
+
+.ic-chip-btn .ic-desc {
+    font-size: 0.8em;
+    color: rgba(255,255,255,0.5);
+}
+
+/* ============================
+   Status Bar
+   ============================ */
+.status-bar {
+    background: #111115;
+    padding: 6px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7em;
+    color: #888;
+    border-top: 1px solid #333;
+    font-family: 'Courier New', monospace;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#wire-mode-indicator {
+    color: #ffcc44;
+    font-weight: bold;
+}
+
+/* ============================
+   Toolbar
+   ============================ */
+.toolbar {
+    background: linear-gradient(180deg, #b8b4aa, #a8a49a);
+    padding: 8px 14px;
+    display: flex;
+    gap: 6px;
+    border-radius: 0 0 6px 6px;
+}
+
+.tool-btn {
+    padding: 5px 12px;
+    background: #3a3a44;
+    color: #ddd;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7em;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.tool-btn:hover {
+    background: #4a4a54;
+    border-color: #5588cc;
+}
+
+.tool-btn.active {
+    background: #1a3a6e;
+    border-color: #5588cc;
+    color: #aaccff;
+}
+
+.tool-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.tool-icon {
+    font-size: 1em;
+}
+
+/* ============================
+   Powered Off State
+   ============================ */
+.powered-off .switches-row .toggle-switch,
+.powered-off .clock-toggle-group .toggle-switch,
+.powered-off .pulser-btn,
+.powered-off .freq-btn,
+.powered-off .probe-input-point,
+.powered-off .bb-hole,
+.powered-off .rail-hole,
+.powered-off .ic-chip-btn,
+.powered-off .tool-btn:not(#btn-reset) {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+/* ============================
+   Responsive
+   ============================ */
+@media (max-width: 1200px) {
+    .control-strip {
+        flex-wrap: wrap;
+    }
+
+    .output-strip,
+    .input-strip {
+        flex-direction: column;
+    }
+
+    .leds-row,
+    .switches-row {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 900px) {
+    .control-strip {
+        flex-direction: column;
+    }
+
+    .bottom-strip {
+        flex-direction: column;
+    }
+
+    .leds-row,
+    .switches-row {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
