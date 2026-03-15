@@ -8,67 +8,66 @@
 </head>
 <body>
     <div id="trainer-kit" class="trainer-kit powered-off">
-        <!-- Enclosure Top Edge -->
-        <div class="enclosure-top"></div>
+        <!-- Grey Metal Enclosure Frame -->
+        <div class="enclosure-frame">
 
-        <!-- Title Label Strip -->
-        <div class="title-bar">
-            <div class="title-bar-inner">
-                <span class="kit-model">DTK-02</span>
-                <span class="kit-title">DIGITAL IC TRAINER KIT</span>
+            <!-- Title Label Strip -->
+            <div class="title-bar">
+                <div class="title-bar-inner">
+                    <span class="kit-title">DIGITAL IC TRAINER KIT</span>
+                    <span class="kit-model">DTK-02</span>
+                </div>
             </div>
-        </div>
 
-        <!-- PCB Board -->
-        <div class="pcb-board">
+            <!-- Main Dark Panel -->
+            <div class="main-panel">
 
-            <!-- Row 1: Power Supply + Clock Generator + Pulse + Probe -->
-            <div class="pcb-row pcb-row-top">
-                <!-- Power Supply -->
-                <div class="pcb-section power-section">
-                    <div class="silk-label silk-title">DC POWER SUPPLY</div>
-                    <div class="power-controls">
-                        <div class="power-switch-container">
-                            <div class="silk-label">POWER</div>
-                            <div class="toggle-switch power-toggle" id="power-switch" data-state="off">
-                                <div class="rocker-switch">
-                                    <div class="rocker-label-on">I</div>
-                                    <div class="rocker-label-off">O</div>
-                                    <div class="rocker-thumb"></div>
+                <!-- Top Control Strip: Power + Clock + Pulse + Probe -->
+                <div class="control-strip">
+                    <!-- Power Supply -->
+                    <div class="panel-section power-section">
+                        <div class="section-label">DC POWER SUPPLY</div>
+                        <div class="power-controls">
+                            <div class="power-switch-group">
+                                <span class="ctrl-label">POWER</span>
+                                <div class="toggle-switch power-toggle" id="power-switch" data-state="off">
+                                    <div class="rocker-switch">
+                                        <div class="rocker-label-on">I</div>
+                                        <div class="rocker-label-off">O</div>
+                                        <div class="rocker-thumb"></div>
+                                    </div>
+                                    <span class="state-label">OFF</span>
                                 </div>
-                                <span class="state-label">OFF</span>
                             </div>
-                        </div>
-                        <div class="power-led-container">
-                            <div class="power-led" id="power-led"></div>
-                            <div class="silk-label">PWR</div>
-                        </div>
-                        <div class="voltage-terminals">
-                            <div class="terminal terminal-vcc">
-                                <div class="banana-jack red"></div>
-                                <div class="silk-label">+5V</div>
+                            <div class="power-led-group">
+                                <div class="power-led" id="power-led"></div>
+                                <span class="ctrl-label">PWR</span>
                             </div>
-                            <div class="terminal terminal-pos12">
-                                <div class="banana-jack orange"></div>
-                                <div class="silk-label">+12V</div>
-                            </div>
-                            <div class="terminal terminal-neg12">
-                                <div class="banana-jack blue"></div>
-                                <div class="silk-label">-12V</div>
-                            </div>
-                            <div class="terminal terminal-gnd">
-                                <div class="banana-jack black"></div>
-                                <div class="silk-label">GND</div>
+                            <div class="voltage-terminals">
+                                <div class="terminal">
+                                    <div class="banana-jack red"></div>
+                                    <span class="ctrl-label">+5V</span>
+                                </div>
+                                <div class="terminal">
+                                    <div class="banana-jack orange"></div>
+                                    <span class="ctrl-label">+12V</span>
+                                </div>
+                                <div class="terminal">
+                                    <div class="banana-jack blue"></div>
+                                    <span class="ctrl-label">-12V</span>
+                                </div>
+                                <div class="terminal">
+                                    <div class="banana-jack black"></div>
+                                    <span class="ctrl-label">GND</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Clock Generator -->
-                <div class="pcb-section clock-section">
-                    <div class="silk-label silk-title">CLOCK GENERATOR</div>
-                    <div class="clock-controls">
-                        <div class="clock-freq-control">
+                    <!-- Clock Generator -->
+                    <div class="panel-section clock-section">
+                        <div class="section-label">CLOCK GENERATOR</div>
+                        <div class="clock-controls">
                             <div class="freq-buttons">
                                 <button class="freq-btn active" data-freq="1">1Hz</button>
                                 <button class="freq-btn" data-freq="10">10Hz</button>
@@ -78,79 +77,104 @@
                                 <button class="freq-btn" data-freq="100000">100kHz</button>
                                 <button class="freq-btn" data-freq="1000000">1MHz</button>
                             </div>
-                        </div>
-                        <div class="clock-right">
-                            <div class="clock-display">
-                                <div class="clock-led" id="clock-led"></div>
-                                <div class="silk-label">CLK</div>
-                                <div class="clock-output-point" data-conn="clock-output" title="Clock output"></div>
-                            </div>
-                            <div class="clock-toggle-container">
-                                <div class="silk-label">ENABLE</div>
-                                <div class="toggle-switch clock-toggle" id="clock-enable" data-state="off">
-                                    <div class="toggle-track">
-                                        <div class="toggle-thumb"></div>
+                            <div class="clock-indicators">
+                                <div class="clock-led-group">
+                                    <div class="clock-led" id="clock-led"></div>
+                                    <span class="ctrl-label">CLK</span>
+                                    <div class="clock-output-point" data-conn="clock-output" title="Clock output"></div>
+                                </div>
+                                <div class="clock-toggle-group">
+                                    <span class="ctrl-label">ENABLE</span>
+                                    <div class="toggle-switch clock-toggle" id="clock-enable" data-state="off">
+                                        <div class="toggle-track">
+                                            <div class="toggle-thumb"></div>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="freq-display" id="freq-display">1 Hz</div>
                             </div>
-                            <div class="freq-display" id="freq-display">1 Hz</div>
+                        </div>
+                    </div>
+
+                    <!-- Pulse Generator -->
+                    <div class="panel-section pulse-section">
+                        <div class="section-label">LOGIC PULSAR</div>
+                        <div class="pulse-controls">
+                            <div class="pulser-group">
+                                <span class="ctrl-label">L→H</span>
+                                <button class="pulser-btn pulser-lh" id="pulser-lh-btn"></button>
+                            </div>
+                            <div class="pulser-group">
+                                <span class="ctrl-label">H→L</span>
+                                <button class="pulser-btn pulser-hl" id="pulser-hl-btn"></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logic Probe -->
+                    <div class="panel-section probe-section">
+                        <div class="section-label">LOGIC PROBE</div>
+                        <div class="probe-controls">
+                            <div class="probe-input-group">
+                                <div class="probe-input-point" id="probe-input" title="Click to probe a point"></div>
+                                <span class="ctrl-label">INPUT</span>
+                            </div>
+                            <div class="probe-indicators">
+                                <div class="probe-led-group">
+                                    <div class="probe-led probe-high-led" id="probe-high-led"></div>
+                                    <span class="ctrl-label">H</span>
+                                </div>
+                                <div class="probe-led-group">
+                                    <div class="probe-led probe-low-led" id="probe-low-led"></div>
+                                    <span class="ctrl-label">L</span>
+                                </div>
+                                <div class="probe-led-group">
+                                    <div class="probe-led probe-tri-led" id="probe-tri-led"></div>
+                                    <span class="ctrl-label">Z</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Pulse Generator -->
-                <div class="pcb-section pulse-section">
-                    <div class="silk-label silk-title">LOGIC PULSAR</div>
-                    <div class="pulse-controls">
-                        <div class="pulser-container">
-                            <div class="silk-label">L→H</div>
-                            <button class="pulser-btn pulser-lh" id="pulser-lh-btn"></button>
-                        </div>
-                        <div class="pulser-container">
-                            <div class="silk-label">H→L</div>
-                            <button class="pulser-btn pulser-hl" id="pulser-hl-btn"></button>
-                        </div>
+                <!-- OUTPUT: Horizontal LED Row (top of main area) -->
+                <div class="output-strip">
+                    <div class="strip-label-box"><span class="strip-label">OUTPUT</span></div>
+                    <div class="leds-row" id="leds-container">
+                        <!-- LEDs L0-L9 generated by JS -->
                     </div>
                 </div>
 
-                <!-- Logic Probe -->
-                <div class="pcb-section probe-section">
-                    <div class="silk-label silk-title">LOGIC PROBE</div>
-                    <div class="probe-controls">
-                        <div class="probe-input-container">
-                            <div class="probe-input-point" id="probe-input" title="Click to probe a point"></div>
-                            <div class="silk-label">INPUT</div>
-                        </div>
-                        <div class="probe-indicators">
-                            <div class="probe-led-group">
-                                <div class="probe-led probe-high-led" id="probe-high-led"></div>
-                                <div class="silk-label">H</div>
+                <!-- CIRCUIT: Center area with IC Sockets + Breadboard -->
+                <div class="circuit-area">
+                    <div class="circuit-label-box"><span class="circuit-label">CIRCUIT</span></div>
+
+                    <!-- IC Sockets -->
+                    <div class="ic-sockets-area">
+                        <div class="section-label">IC SOCKETS</div>
+                        <div class="ic-sockets-grid">
+                            <div class="socket-row">
+                                <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
+                                <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
+                                <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
+                                <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
                             </div>
-                            <div class="probe-led-group">
-                                <div class="probe-led probe-low-led" id="probe-low-led"></div>
-                                <div class="silk-label">L</div>
+                            <div class="socket-row">
+                                <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
+                                <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
+                                <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
+                                <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
                             </div>
-                            <div class="probe-led-group">
-                                <div class="probe-led probe-tri-led" id="probe-tri-led"></div>
-                                <div class="silk-label">Z</div>
+                            <div class="socket-row">
+                                <div class="dip-socket dip-16" title="16-Pin Socket"><div class="dip-notch"></div><span>16P</span></div>
+                                <div class="dip-socket dip-16" title="16-Pin Socket"><div class="dip-notch"></div><span>16P</span></div>
+                                <div class="dip-socket dip-16" title="16-Pin Socket"><div class="dip-notch"></div><span>16P</span></div>
+                                <div class="dip-socket dip-20" title="20-Pin Socket"><div class="dip-notch"></div><span>20P</span></div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Row 2: Switches + Breadboard + LEDs -->
-            <div class="pcb-row pcb-row-main">
-                <!-- Logic Switches (Left Side) -->
-                <div class="pcb-section switches-section">
-                    <div class="silk-label silk-title">LOGIC INPUTS</div>
-                    <div class="switches-container" id="switches-container">
-                        <!-- Switches S0-S9 generated by JS -->
-                    </div>
-                </div>
-
-                <!-- Breadboard (Center) -->
-                <div class="pcb-section breadboard-section">
+                    <!-- Breadboard -->
                     <div class="breadboard-area">
                         <div class="breadboard" id="breadboard">
                             <div class="power-rail top-rail">
@@ -173,112 +197,89 @@
                     </div>
                 </div>
 
-                <!-- LED Outputs (Right Side) -->
-                <div class="pcb-section leds-section">
-                    <div class="silk-label silk-title">LOGIC OUTPUTS</div>
-                    <div class="leds-container" id="leds-container">
-                        <!-- LEDs L0-L9 generated by JS -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Row 3: Seven Segment + IC Sockets + IC Library -->
-            <div class="pcb-row pcb-row-bottom">
-                <!-- Seven Segment Displays -->
-                <div class="pcb-section seven-seg-section">
-                    <div class="silk-label silk-title">7-SEGMENT DISPLAY</div>
-                    <div class="seven-seg-container">
-                        <div class="seven-seg-unit">
-                            <div class="seven-seg-display" id="seg-display-0">
-                                <svg viewBox="0 0 60 100" class="seg-svg">
-                                    <polygon data-seg="a" class="segment" points="12,8 48,8 44,14 16,14"/>
-                                    <polygon data-seg="b" class="segment" points="49,10 49,46 45,42 45,16"/>
-                                    <polygon data-seg="c" class="segment" points="49,52 49,88 45,84 45,56"/>
-                                    <polygon data-seg="d" class="segment" points="12,90 48,90 44,84 16,84"/>
-                                    <polygon data-seg="e" class="segment" points="11,52 11,88 15,84 15,56"/>
-                                    <polygon data-seg="f" class="segment" points="11,10 11,46 15,42 15,16"/>
-                                    <polygon data-seg="g" class="segment" points="12,49 48,49 45,54 15,54"/>
-                                    <circle data-seg="dp" class="segment" cx="55" cy="90" r="3"/>
-                                </svg>
-                            </div>
-                            <div class="seg-pins">
-                                <span>a</span><span>b</span><span>c</span><span>d</span>
-                                <span>e</span><span>f</span><span>g</span><span>dp</span>
-                            </div>
-                        </div>
-                        <div class="seven-seg-unit">
-                            <div class="seven-seg-display" id="seg-display-1">
-                                <svg viewBox="0 0 60 100" class="seg-svg">
-                                    <polygon data-seg="a" class="segment" points="12,8 48,8 44,14 16,14"/>
-                                    <polygon data-seg="b" class="segment" points="49,10 49,46 45,42 45,16"/>
-                                    <polygon data-seg="c" class="segment" points="49,52 49,88 45,84 45,56"/>
-                                    <polygon data-seg="d" class="segment" points="12,90 48,90 44,84 16,84"/>
-                                    <polygon data-seg="e" class="segment" points="11,52 11,88 15,84 15,56"/>
-                                    <polygon data-seg="f" class="segment" points="11,10 11,46 15,42 15,16"/>
-                                    <polygon data-seg="g" class="segment" points="12,49 48,49 45,54 15,54"/>
-                                    <circle data-seg="dp" class="segment" cx="55" cy="90" r="3"/>
-                                </svg>
-                            </div>
-                            <div class="seg-pins">
-                                <span>a</span><span>b</span><span>c</span><span>d</span>
-                                <span>e</span><span>f</span><span>g</span><span>dp</span>
-                            </div>
-                        </div>
-                        <div class="seven-seg-unit">
-                            <div class="seven-seg-display" id="seg-display-2">
-                                <svg viewBox="0 0 60 100" class="seg-svg">
-                                    <polygon data-seg="a" class="segment" points="12,8 48,8 44,14 16,14"/>
-                                    <polygon data-seg="b" class="segment" points="49,10 49,46 45,42 45,16"/>
-                                    <polygon data-seg="c" class="segment" points="49,52 49,88 45,84 45,56"/>
-                                    <polygon data-seg="d" class="segment" points="12,90 48,90 44,84 16,84"/>
-                                    <polygon data-seg="e" class="segment" points="11,52 11,88 15,84 15,56"/>
-                                    <polygon data-seg="f" class="segment" points="11,10 11,46 15,42 15,16"/>
-                                    <polygon data-seg="g" class="segment" points="12,49 48,49 45,54 15,54"/>
-                                    <circle data-seg="dp" class="segment" cx="55" cy="90" r="3"/>
-                                </svg>
-                            </div>
-                            <div class="seg-pins">
-                                <span>a</span><span>b</span><span>c</span><span>d</span>
-                                <span>e</span><span>f</span><span>g</span><span>dp</span>
-                            </div>
-                        </div>
+                <!-- INPUT: Horizontal Switch Row (bottom of main area) -->
+                <div class="input-strip">
+                    <div class="strip-label-box"><span class="strip-label">INPUT</span></div>
+                    <div class="switches-row" id="switches-container">
+                        <!-- Switches S0-S9 generated by JS -->
                     </div>
                 </div>
 
-                <!-- IC Sockets on Board -->
-                <div class="pcb-section ic-sockets-section">
-                    <div class="silk-label silk-title">IC SOCKETS ON BOARD</div>
-                    <div class="ic-sockets-visual">
-                        <div class="socket-row">
-                            <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
-                            <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
-                            <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
-                            <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
+                <!-- Bottom: Seven Segment + IC Library -->
+                <div class="bottom-strip">
+                    <!-- Seven Segment Displays -->
+                    <div class="panel-section seven-seg-section">
+                        <div class="section-label">7-SEGMENT DISPLAY</div>
+                        <div class="seven-seg-container">
+                            <div class="seven-seg-unit">
+                                <div class="seven-seg-display" id="seg-display-0">
+                                    <svg viewBox="0 0 60 100" class="seg-svg">
+                                        <polygon data-seg="a" class="segment" points="12,8 48,8 44,14 16,14"/>
+                                        <polygon data-seg="b" class="segment" points="49,10 49,46 45,42 45,16"/>
+                                        <polygon data-seg="c" class="segment" points="49,52 49,88 45,84 45,56"/>
+                                        <polygon data-seg="d" class="segment" points="12,90 48,90 44,84 16,84"/>
+                                        <polygon data-seg="e" class="segment" points="11,52 11,88 15,84 15,56"/>
+                                        <polygon data-seg="f" class="segment" points="11,10 11,46 15,42 15,16"/>
+                                        <polygon data-seg="g" class="segment" points="12,49 48,49 45,54 15,54"/>
+                                        <circle data-seg="dp" class="segment" cx="55" cy="90" r="3"/>
+                                    </svg>
+                                </div>
+                                <div class="seg-pins">
+                                    <span>a</span><span>b</span><span>c</span><span>d</span>
+                                    <span>e</span><span>f</span><span>g</span><span>dp</span>
+                                </div>
+                            </div>
+                            <div class="seven-seg-unit">
+                                <div class="seven-seg-display" id="seg-display-1">
+                                    <svg viewBox="0 0 60 100" class="seg-svg">
+                                        <polygon data-seg="a" class="segment" points="12,8 48,8 44,14 16,14"/>
+                                        <polygon data-seg="b" class="segment" points="49,10 49,46 45,42 45,16"/>
+                                        <polygon data-seg="c" class="segment" points="49,52 49,88 45,84 45,56"/>
+                                        <polygon data-seg="d" class="segment" points="12,90 48,90 44,84 16,84"/>
+                                        <polygon data-seg="e" class="segment" points="11,52 11,88 15,84 15,56"/>
+                                        <polygon data-seg="f" class="segment" points="11,10 11,46 15,42 15,16"/>
+                                        <polygon data-seg="g" class="segment" points="12,49 48,49 45,54 15,54"/>
+                                        <circle data-seg="dp" class="segment" cx="55" cy="90" r="3"/>
+                                    </svg>
+                                </div>
+                                <div class="seg-pins">
+                                    <span>a</span><span>b</span><span>c</span><span>d</span>
+                                    <span>e</span><span>f</span><span>g</span><span>dp</span>
+                                </div>
+                            </div>
+                            <div class="seven-seg-unit">
+                                <div class="seven-seg-display" id="seg-display-2">
+                                    <svg viewBox="0 0 60 100" class="seg-svg">
+                                        <polygon data-seg="a" class="segment" points="12,8 48,8 44,14 16,14"/>
+                                        <polygon data-seg="b" class="segment" points="49,10 49,46 45,42 45,16"/>
+                                        <polygon data-seg="c" class="segment" points="49,52 49,88 45,84 45,56"/>
+                                        <polygon data-seg="d" class="segment" points="12,90 48,90 44,84 16,84"/>
+                                        <polygon data-seg="e" class="segment" points="11,52 11,88 15,84 15,56"/>
+                                        <polygon data-seg="f" class="segment" points="11,10 11,46 15,42 15,16"/>
+                                        <polygon data-seg="g" class="segment" points="12,49 48,49 45,54 15,54"/>
+                                        <circle data-seg="dp" class="segment" cx="55" cy="90" r="3"/>
+                                    </svg>
+                                </div>
+                                <div class="seg-pins">
+                                    <span>a</span><span>b</span><span>c</span><span>d</span>
+                                    <span>e</span><span>f</span><span>g</span><span>dp</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="socket-row">
-                            <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
-                            <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
-                            <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
-                            <div class="dip-socket dip-14" title="14-Pin Socket"><div class="dip-notch"></div><span>14P</span></div>
-                        </div>
-                        <div class="socket-row">
-                            <div class="dip-socket dip-16" title="16-Pin Socket"><div class="dip-notch"></div><span>16P</span></div>
-                            <div class="dip-socket dip-16" title="16-Pin Socket"><div class="dip-notch"></div><span>16P</span></div>
-                            <div class="dip-socket dip-16" title="16-Pin Socket"><div class="dip-notch"></div><span>16P</span></div>
-                            <div class="dip-socket dip-20" title="20-Pin Socket"><div class="dip-notch"></div><span>20P</span></div>
+                    </div>
+
+                    <!-- IC Library -->
+                    <div class="panel-section ic-library-section">
+                        <div class="section-label">IC LIBRARY</div>
+                        <div class="ic-library-container" id="ic-library">
+                            <!-- Populated by JS -->
                         </div>
                     </div>
                 </div>
 
-                <!-- IC Library -->
-                <div class="pcb-section ic-library-section">
-                    <div class="silk-label silk-title">IC LIBRARY</div>
-                    <div class="ic-library-container" id="ic-library">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-            </div>
-        </div>
+            </div><!-- end main-panel -->
+
+        </div><!-- end enclosure-frame -->
 
         <!-- Status Bar -->
         <div class="status-bar">
@@ -288,7 +289,7 @@
 
         <!-- Toolbar -->
         <div class="toolbar">
-            <button class="tool-btn" id="btn-wire" title="Wire Tool (2mm Banana Patch Cord)">
+            <button class="tool-btn" id="btn-wire" title="Wire Tool">
                 <span class="tool-icon">⚡</span> Wire
             </button>
             <button class="tool-btn" id="btn-delete-wire" title="Delete Wire">

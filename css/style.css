@@ -1,6 +1,7 @@
 /* ============================================
    DTK02 Digital IC Trainer Kit - Realistic UI
    Matches the physical DTK-02 device appearance
+   Dark panel, grey enclosure, horizontal layout
    ============================================ */
 
 /* Reset & Base */
@@ -12,35 +13,37 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #2c2c2c;
+    background: #1a1a1e;
     color: #e0e0e0;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 16px;
+    padding: 20px;
     overflow-x: auto;
 }
 
 /* ============================
-   Trainer Kit Enclosure
+   Trainer Kit Container
    ============================ */
 .trainer-kit {
     width: 100%;
-    max-width: 1500px;
-    background: #d4cfc4;
-    border-radius: 10px;
-    border: 3px solid #a09888;
-    box-shadow:
-        0 8px 32px rgba(0,0,0,0.5),
-        inset 0 2px 0 rgba(255,255,255,0.3),
-        inset 0 -2px 0 rgba(0,0,0,0.1);
-    overflow: hidden;
+    max-width: 1400px;
 }
 
-.enclosure-top {
-    height: 6px;
-    background: linear-gradient(180deg, #e0dbd0, #c8c0b4);
+/* ============================
+   Grey Metal Enclosure Frame
+   ============================ */
+.enclosure-frame {
+    background: linear-gradient(180deg, #b8b4aa, #9e998e, #a8a49a);
+    border-radius: 8px;
+    border: 2px solid #7a756a;
+    box-shadow:
+        0 10px 40px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        inset 0 -1px 0 rgba(0,0,0,0.2);
+    padding: 10px;
+    overflow: hidden;
 }
 
 /* ============================
@@ -48,17 +51,26 @@ body {
    ============================ */
 .title-bar {
     background: linear-gradient(180deg, #1a3a6e, #0d2240);
-    padding: 10px 20px;
+    padding: 8px 20px;
+    border-radius: 4px 4px 0 0;
     border-bottom: 2px solid #0a1830;
-    border-top: 1px solid #2a5a9e;
     display: flex;
     justify-content: center;
+    margin-bottom: 4px;
 }
 
 .title-bar-inner {
     display: flex;
     align-items: baseline;
-    gap: 14px;
+    gap: 16px;
+}
+
+.kit-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #a8c8ff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 }
 
 .kit-model {
@@ -69,101 +81,93 @@ body {
     text-shadow: 0 2px 4px rgba(0,0,0,0.4);
 }
 
-.kit-title {
-    font-size: 1.1em;
-    font-weight: 600;
-    color: #a8c8ff;
-    letter-spacing: 2px;
-}
-
 /* ============================
-   PCB Board
+   Main Dark Panel (the black face plate)
    ============================ */
-.pcb-board {
-    background: #1a5c2a;
-    background-image:
-        radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 8px 8px;
-    margin: 8px;
-    border-radius: 4px;
-    border: 2px solid #0d3518;
-    padding: 12px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
-}
-
-/* PCB Rows */
-.pcb-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.pcb-row:last-child {
-    margin-bottom: 0;
-}
-
-.pcb-row-top {
-    flex-wrap: wrap;
-}
-
-.pcb-row-main {
-    align-items: stretch;
-    min-height: 400px;
-}
-
-.pcb-row-bottom {
-    flex-wrap: wrap;
-}
-
-/* ============================
-   PCB Sections (Silkscreen border)
-   ============================ */
-.pcb-section {
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 3px;
+.main-panel {
+    background: #1e1e22;
+    border-radius: 0 0 4px 4px;
+    border: 1px solid #333;
     padding: 10px;
-    position: relative;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
 }
 
-/* Silkscreen Labels */
-.silk-label {
+/* ============================
+   Section Labels (white on dark)
+   ============================ */
+.section-label {
     font-size: 0.6em;
     font-weight: 700;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.ctrl-label {
+    font-size: 0.55em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
     letter-spacing: 1px;
     text-transform: uppercase;
     font-family: 'Courier New', Courier, monospace;
 }
 
-.silk-label.silk-title {
+/* ============================
+   Panel Sections (bordered areas on dark panel)
+   ============================ */
+.panel-section {
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 3px;
+    padding: 8px 10px;
+    position: relative;
+}
+
+.panel-section .section-label {
     position: absolute;
     top: -7px;
     left: 8px;
-    background: #1a5c2a;
+    background: #1e1e22;
     padding: 0 6px;
-    font-size: 0.65em;
-    color: rgba(255,255,255,0.9);
+    font-size: 0.6em;
 }
 
 /* ============================
-   Power Supply Section
+   Top Control Strip
    ============================ */
+.control-strip {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+/* Power Supply */
 .power-section {
     flex: 0 0 auto;
-    min-width: 320px;
+    min-width: 300px;
 }
 
 .power-controls {
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding-top: 6px;
+    gap: 16px;
+    padding-top: 4px;
 }
 
-.power-switch-container {
+.power-switch-group {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+}
+
+.power-led-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
 }
 
 /* Rocker Switch (Power) */
@@ -217,13 +221,6 @@ body {
 }
 
 /* Power LED */
-.power-led-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-}
-
 .power-led {
     width: 10px;
     height: 10px;
@@ -242,7 +239,7 @@ body {
 /* Banana Jack Terminals */
 .voltage-terminals {
     display: flex;
-    gap: 14px;
+    gap: 12px;
 }
 
 .terminal {
@@ -335,7 +332,7 @@ body {
 }
 
 /* ============================
-   Clock Generator Section
+   Clock Generator
    ============================ */
 .clock-section {
     flex: 1;
@@ -345,18 +342,18 @@ body {
 .clock-controls {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding-top: 6px;
+    gap: 12px;
+    padding-top: 4px;
     flex-wrap: wrap;
 }
 
-.clock-right {
+.clock-indicators {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
-.clock-display {
+.clock-led-group {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -387,12 +384,6 @@ body {
     cursor: pointer;
 }
 
-.clock-freq-control {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
 .freq-buttons {
     display: flex;
     gap: 3px;
@@ -401,7 +392,7 @@ body {
 
 .freq-btn {
     padding: 3px 6px;
-    background: #2a4a3a;
+    background: #2a2a30;
     color: rgba(255,255,255,0.8);
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 3px;
@@ -414,7 +405,7 @@ body {
 }
 
 .freq-btn:hover {
-    background: #3a6a5a;
+    background: #3a3a44;
     border-color: rgba(255,255,255,0.4);
 }
 
@@ -433,7 +424,7 @@ body {
     font-family: 'Courier New', monospace;
 }
 
-.clock-toggle-container {
+.clock-toggle-group {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -441,21 +432,21 @@ body {
 }
 
 /* ============================
-   Pulse Generator Section
+   Pulse Generator
    ============================ */
 .pulse-section {
     flex: 0 0 auto;
-    min-width: 120px;
+    min-width: 110px;
 }
 
 .pulse-controls {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding-top: 6px;
+    padding-top: 4px;
 }
 
-.pulser-container {
+.pulser-group {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -501,7 +492,7 @@ body {
 }
 
 /* ============================
-   Logic Probe Section
+   Logic Probe
    ============================ */
 .probe-section {
     flex: 0 0 auto;
@@ -512,10 +503,10 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding-top: 6px;
+    padding-top: 4px;
 }
 
-.probe-input-container {
+.probe-input-group {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -577,78 +568,90 @@ body {
 }
 
 /* ============================
-   Logic Switches Section
+   OUTPUT Strip (Horizontal LED Row - Top)
    ============================ */
-.switches-section {
-    flex: 0 0 130px;
-    min-width: 130px;
-}
-
-.switches-container {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding-top: 6px;
-}
-
-.logic-switch {
+.output-strip {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 2px 0;
+    gap: 10px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255,80,80,0.3);
+    border-radius: 4px;
+    padding: 6px 12px;
+    background: rgba(255,80,80,0.03);
 }
 
-.switch-label {
-    font-size: 0.65em;
-    font-weight: bold;
-    min-width: 20px;
-    color: rgba(255,255,255,0.85);
+.strip-label-box {
+    flex: 0 0 auto;
+}
+
+.strip-label {
+    font-size: 0.75em;
+    font-weight: 900;
+    color: #ff6666;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     font-family: 'Courier New', monospace;
+    writing-mode: horizontal-tb;
 }
 
-.switch-led-low,
-.switch-led-high {
-    width: 6px;
-    height: 6px;
+.leds-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: center;
+}
+
+.logic-led {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 6px;
+}
+
+.led-indicator {
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     background: #2a2a2a;
-    border: 1px solid #444;
+    border: 2px solid #444;
     transition: all 0.15s;
 }
 
-.switch-led-low.on {
-    background: #ff4444;
-    box-shadow: 0 0 4px #ff4444;
+.led-indicator.on {
+    background: #ff3333;
+    box-shadow: 0 0 10px #ff3333, 0 0 20px rgba(255,50,50,0.3);
     border-color: #cc0000;
 }
 
-.switch-led-high.on {
-    background: #00ff00;
-    box-shadow: 0 0 4px #00ff00;
-    border-color: #00cc00;
-}
-
-.switch-state {
+.led-label {
     font-size: 0.6em;
     font-weight: bold;
-    min-width: 12px;
-    padding: 1px 4px;
-    border-radius: 2px;
-    text-align: center;
+    color: rgba(255,255,255,0.7);
     font-family: 'Courier New', monospace;
 }
 
-.switch-state.high {
-    background: rgba(0,255,0,0.2);
-    color: #66ff66;
+.led-state {
+    font-size: 0.55em;
+    font-weight: bold;
+    padding: 1px 3px;
+    border-radius: 2px;
+    font-family: 'Courier New', monospace;
 }
 
-.switch-state.low {
+.led-state.high {
+    background: rgba(255,60,60,0.2);
+    color: #ff6666;
+}
+
+.led-state.low {
     background: rgba(255,255,255,0.1);
     color: rgba(255,255,255,0.5);
 }
 
-.switch-output-point {
+.led-input-point {
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -658,31 +661,111 @@ body {
     transition: background 0.2s;
 }
 
-.switch-output-point.high {
-    background: #00cc88;
-    box-shadow: 0 0 4px #00cc88;
-}
-
 /* ============================
-   Breadboard Section
+   CIRCUIT Area (IC Sockets + Breadboard - Center)
    ============================ */
-.breadboard-section {
-    flex: 1;
-    overflow: auto;
+.circuit-area {
     position: relative;
-    max-height: 700px;
+    border: 1px solid rgba(0,200,255,0.25);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: rgba(0,200,255,0.02);
 }
 
+.circuit-label-box {
+    position: absolute;
+    top: -8px;
+    left: 16px;
+    background: #1e1e22;
+    padding: 0 8px;
+}
+
+.circuit-label {
+    font-size: 0.7em;
+    font-weight: 900;
+    color: #44ccff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+}
+
+/* IC Sockets Area */
+.ic-sockets-area {
+    margin-bottom: 10px;
+}
+
+.ic-sockets-area .section-label {
+    margin-bottom: 4px;
+}
+
+.ic-sockets-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.socket-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.dip-socket {
+    background: #111;
+    border: 1px solid #444;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
+}
+
+.dip-socket span {
+    font-size: 0.5em;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Courier New', monospace;
+}
+
+.dip-notch {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 3px;
+    background: #222;
+    border-radius: 0 0 3px 3px;
+    border: 1px solid #555;
+    border-top: none;
+}
+
+.dip-14 {
+    width: 42px;
+    height: 24px;
+}
+
+.dip-16 {
+    width: 46px;
+    height: 24px;
+}
+
+.dip-20 {
+    width: 54px;
+    height: 24px;
+}
+
+/* Breadboard */
 .breadboard-area {
     position: relative;
-    padding-top: 6px;
 }
 
 .breadboard {
     background: #f8f4ec;
     border-radius: 4px;
     padding: 6px;
-    min-height: 380px;
+    min-height: 300px;
     border: 2px solid #c8c0a8;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
@@ -870,69 +953,89 @@ body {
 }
 
 /* ============================
-   LED Outputs Section
+   INPUT Strip (Horizontal Switch Row - Bottom)
    ============================ */
-.leds-section {
-    flex: 0 0 130px;
-    min-width: 130px;
-}
-
-.leds-container {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding-top: 6px;
-}
-
-.logic-led {
+.input-strip {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 2px 0;
+    gap: 10px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255,0,255,0.25);
+    border-radius: 4px;
+    padding: 6px 12px;
+    background: rgba(255,0,255,0.03);
 }
 
-.led-indicator {
-    width: 12px;
-    height: 12px;
+.input-strip .strip-label {
+    color: #dd66dd;
+}
+
+.switches-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: center;
+}
+
+.logic-switch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 3px 4px;
+}
+
+.switch-label {
+    font-size: 0.6em;
+    font-weight: bold;
+    color: rgba(255,255,255,0.85);
+    font-family: 'Courier New', monospace;
+}
+
+.switch-led-low,
+.switch-led-high {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: #2a2a2a;
     border: 1px solid #444;
     transition: all 0.15s;
 }
 
-.led-indicator.on {
-    background: #ff3333;
-    box-shadow: 0 0 8px #ff3333, 0 0 16px rgba(255,50,50,0.3);
+.switch-led-low.on {
+    background: #ff4444;
+    box-shadow: 0 0 4px #ff4444;
     border-color: #cc0000;
 }
 
-.led-label {
-    font-size: 0.65em;
-    font-weight: bold;
-    color: rgba(255,255,255,0.7);
-    min-width: 20px;
-    font-family: 'Courier New', monospace;
+.switch-led-high.on {
+    background: #00ff00;
+    box-shadow: 0 0 4px #00ff00;
+    border-color: #00cc00;
 }
 
-.led-state {
-    font-size: 0.6em;
+.switch-state {
+    font-size: 0.55em;
     font-weight: bold;
-    padding: 1px 4px;
+    min-width: 12px;
+    padding: 1px 3px;
     border-radius: 2px;
+    text-align: center;
     font-family: 'Courier New', monospace;
 }
 
-.led-state.high {
-    background: rgba(255,60,60,0.2);
-    color: #ff6666;
+.switch-state.high {
+    background: rgba(0,255,0,0.2);
+    color: #66ff66;
 }
 
-.led-state.low {
+.switch-state.low {
     background: rgba(255,255,255,0.1);
     color: rgba(255,255,255,0.5);
 }
 
-.led-input-point {
+.switch-output-point {
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -942,9 +1045,21 @@ body {
     transition: background 0.2s;
 }
 
+.switch-output-point.high {
+    background: #00cc88;
+    box-shadow: 0 0 4px #00cc88;
+}
+
 /* ============================
-   Seven Segment Section
+   Bottom Strip: Seven Segment + IC Library
    ============================ */
+.bottom-strip {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Seven Segment Section */
 .seven-seg-section {
     flex: 0 0 auto;
     min-width: 220px;
@@ -953,7 +1068,7 @@ body {
 .seven-seg-container {
     display: flex;
     gap: 12px;
-    padding-top: 6px;
+    padding-top: 4px;
     justify-content: center;
 }
 
@@ -1001,75 +1116,7 @@ body {
     font-family: 'Courier New', monospace;
 }
 
-/* ============================
-   IC Sockets Section
-   ============================ */
-.ic-sockets-section {
-    flex: 1;
-    min-width: 300px;
-}
-
-.ic-sockets-visual {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-top: 6px;
-}
-
-.socket-row {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
-
-.dip-socket {
-    background: #111;
-    border: 1px solid #444;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
-}
-
-.dip-socket span {
-    font-size: 0.5em;
-    color: rgba(255,255,255,0.4);
-    font-family: 'Courier New', monospace;
-}
-
-.dip-notch {
-    position: absolute;
-    top: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 3px;
-    background: #222;
-    border-radius: 0 0 3px 3px;
-    border: 1px solid #555;
-    border-top: none;
-}
-
-.dip-14 {
-    width: 40px;
-    height: 22px;
-}
-
-.dip-16 {
-    width: 44px;
-    height: 22px;
-}
-
-.dip-20 {
-    width: 52px;
-    height: 22px;
-}
-
-/* ============================
-   IC Library
-   ============================ */
+/* IC Library */
 .ic-library-section {
     flex: 1;
     min-width: 300px;
@@ -1079,14 +1126,14 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    padding-top: 6px;
-    max-height: 160px;
+    padding-top: 4px;
+    max-height: 140px;
     overflow-y: auto;
 }
 
 .ic-chip-btn {
     padding: 4px 8px;
-    background: #1a3a2a;
+    background: #252530;
     color: rgba(255,255,255,0.8);
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 4px;
@@ -1127,13 +1174,13 @@ body {
    Status Bar
    ============================ */
 .status-bar {
-    background: #1a1a20;
+    background: #111115;
     padding: 6px 14px;
     display: flex;
     justify-content: space-between;
     font-size: 0.7em;
     color: #888;
-    border-top: 1px solid #444;
+    border-top: 1px solid #333;
     font-family: 'Courier New', monospace;
 }
 
@@ -1150,11 +1197,11 @@ body {
    Toolbar
    ============================ */
 .toolbar {
-    background: #d4cfc4;
+    background: linear-gradient(180deg, #b8b4aa, #a8a49a);
     padding: 8px 14px;
     display: flex;
     gap: 6px;
-    border-top: 1px solid #b8b0a4;
+    border-radius: 0 0 6px 6px;
 }
 
 .tool-btn {
@@ -1194,8 +1241,8 @@ body {
 /* ============================
    Powered Off State
    ============================ */
-.powered-off .switches-container .toggle-switch,
-.powered-off .clock-toggle-container .toggle-switch,
+.powered-off .switches-row .toggle-switch,
+.powered-off .clock-toggle-group .toggle-switch,
 .powered-off .pulser-btn,
 .powered-off .freq-btn,
 .powered-off .probe-input-point,
@@ -1211,38 +1258,33 @@ body {
    Responsive
    ============================ */
 @media (max-width: 1200px) {
-    .pcb-row-main {
+    .control-strip {
         flex-wrap: wrap;
     }
 
-    .switches-section,
-    .leds-section {
-        flex: 1 1 100%;
+    .output-strip,
+    .input-strip {
+        flex-direction: column;
     }
 
-    .switches-container,
-    .leds-container {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .breadboard-section {
-        flex: 1 1 100%;
+    .leds-row,
+    .switches-row {
+        justify-content: center;
     }
 }
 
 @media (max-width: 900px) {
-    .pcb-row {
+    .control-strip {
         flex-direction: column;
     }
 
-    .pcb-row-top {
+    .bottom-strip {
         flex-direction: column;
     }
 
-    .switches-container,
-    .leds-container {
-        flex-direction: row;
+    .leds-row,
+    .switches-row {
         flex-wrap: wrap;
+        justify-content: center;
     }
 }
