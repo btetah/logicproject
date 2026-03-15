@@ -18,9 +18,13 @@
         var bottomVccRail = document.getElementById('bottom-vcc-rail');
         var bottomGndRail = document.getElementById('bottom-gnd-rail');
         var clockEnable = document.getElementById('clock-enable');
-        var clockFreqSlider = document.getElementById('clock-freq');
         var freqDisplay = document.getElementById('freq-display');
-        var pulserBtn = document.getElementById('pulser-btn');
+        var pulserLHBtn = document.getElementById('pulser-lh-btn');
+        var pulserHLBtn = document.getElementById('pulser-hl-btn');
+        var probeInput = document.getElementById('probe-input');
+        var probeHighLed = document.getElementById('probe-high-led');
+        var probeLowLed = document.getElementById('probe-low-led');
+        var probeTriLed = document.getElementById('probe-tri-led');
         var btnWire = document.getElementById('btn-wire');
         var btnDeleteWire = document.getElementById('btn-delete-wire');
         var btnClearWires = document.getElementById('btn-clear-wires');
@@ -29,8 +33,9 @@
         var wireModeIndicator = document.getElementById('wire-mode-indicator');
         var statusMsg = document.getElementById('status-msg');
 
-        // Frequency steps
-        var freqSteps = [1, 10, 100, 1000];
+        // DTK02 fixed clock frequencies
+        var freqSteps = [1, 10, 100, 1000, 10000, 100000, 1000000];
+        var currentFreqIndex = 0;
 
         // Initialize components
         Components.initSwitches(switchesContainer, function() {
@@ -73,7 +78,7 @@
                 powerLed.classList.add('on');
                 trainerKit.classList.remove('powered-off');
                 Simulator.setPower(true);
-                setStatus('Power ON - System ready');
+                setStatus('Power ON - System ready (+5V, ±12V active)');
                 powerSwitch.querySelector('.state-label').textContent = 'ON';
             } else {
                 powerLed.classList.remove('on');
@@ -84,6 +89,8 @@
 
                 // Disable clock toggle
                 clockEnable.setAttribute('data-state', 'off');
+                // Reset probe LEDs
+                updateProbeLEDs(-1);
             }
         });
 
@@ -95,7 +102,7 @@
             clockEnable.setAttribute('data-state', newState);
 
             if (newState === 'on') {
-                var freq = freqSteps[parseInt(clockFreqSlider.value)];
+                var freq = freqSteps[currentFreqIndex];
                 Simulator.setClockFrequency(freq);
                 Simulator.startClock();
             } else {
@@ -103,22 +110,67 @@
             }
         });
 
-        // Clock frequency slider
-        clockFreqSlider.addEventListener('input', function() {
-            var freq = freqSteps[parseInt(this.value)];
-            var label = freq >= 1000 ? (freq / 1000) + ' kHz' : freq + ' Hz';
-            freqDisplay.textContent = label;
-            if (clockEnable.getAttribute('data-state') === 'on') {
-                Simulator.setClockFrequency(freq);
-                Simulator.startClock();
-            }
-        });
+        // Frequency selection buttons
+        var freqButtons = document.querySelectorAll('.freq-btn');
+        for (var fi = 0; fi < freqButtons.length; fi++) {
+            (function(btn) {
+                btn.addEventListener('click', function() {
+                    if (!Simulator.isPowerOn()) return;
+                    var freq = parseInt(btn.getAttribute('data-freq'));
+                    currentFreqIndex = freqSteps.indexOf(freq);
 
-        // Pulser button
-        pulserBtn.addEventListener('click', function() {
+                    // Update active button
+                    var allBtns = document.querySelectorAll('.freq-btn');
+                    for (var b = 0; b < allBtns.length; b++) {
+                        allBtns[b].classList.remove('active');
+                    }
+                    btn.classList.add('active');
+
+                    var label = formatFrequency(freq);
+                    freqDisplay.textContent = label;
+
+                    if (clockEnable.getAttribute('data-state') === 'on') {
+                        Simulator.setClockFrequency(freq);
+                        Simulator.startClock();
+                    }
+                });
+            })(freqButtons[fi]);
+        }
+
+        // Pulser buttons - L→H and H→L transitions
+        pulserLHBtn.addEventListener('click', function() {
             if (!Simulator.isPowerOn()) return;
             Simulator.pulse();
         });
+
+        pulserHLBtn.addEventListener('click', function() {
+            if (!Simulator.isPowerOn()) return;
+            Simulator.pulseHigh();
+        });
+
+        // Logic probe input - listen for connection point clicks
+        if (probeInput) {
+            probeInput.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (!Simulator.isPowerOn()) return;
+                setStatus('PROBE MODE: Click a connection point to probe its logic level');
+                // Activate probe mode
+                document.body.classList.add('probe-mode');
+                var probeHandler = function(ev) {
+                    var conn = ev.target.getAttribute('data-conn');
+                    if (conn) {
+                        var value = Simulator.probeValue(conn);
+                        updateProbeLEDs(value);
+                        setStatus('Probe: ' + conn + ' = ' + (value === -1 ? 'TRI-STATE' : (value ? 'HIGH' : 'LOW')));
+                    }
+                    document.body.classList.remove('probe-mode');
+                    document.removeEventListener('click', probeHandler);
+                };
+                setTimeout(function() {
+                    document.addEventListener('click', probeHandler);
+                }, 50);
+            });
+        }
 
         // Wire tool
         btnWire.addEventListener('click', function() {
@@ -177,8 +229,18 @@
 
             // Reset clock
             clockEnable.setAttribute('data-state', 'off');
-            clockFreqSlider.value = 1;
-            freqDisplay.textContent = '10 Hz';
+            currentFreqIndex = 0;
+            freqDisplay.textContent = '1 Hz';
+
+            // Reset frequency buttons
+            var allFreqBtns = document.querySelectorAll('.freq-btn');
+            for (var fb = 0; fb < allFreqBtns.length; fb++) {
+                allFreqBtns[fb].classList.remove('active');
+            }
+            if (allFreqBtns.length > 0) allFreqBtns[0].classList.add('active');
+
+            // Reset probe
+            updateProbeLEDs(-1);
 
             deactivateTools();
             setStatus('System reset complete');
@@ -194,6 +256,26 @@
 
         function setStatus(msg) {
             statusMsg.textContent = msg;
+        }
+
+        function formatFrequency(freq) {
+            if (freq >= 1000000) return (freq / 1000000) + ' MHz';
+            if (freq >= 1000) return (freq / 1000) + ' kHz';
+            return freq + ' Hz';
+        }
+
+        function updateProbeLEDs(value) {
+            if (!probeHighLed || !probeLowLed || !probeTriLed) return;
+            probeHighLed.classList.remove('on');
+            probeLowLed.classList.remove('on');
+            probeTriLed.classList.remove('on');
+            if (value === 1) {
+                probeHighLed.classList.add('on');
+            } else if (value === 0) {
+                probeLowLed.classList.add('on');
+            } else {
+                probeTriLed.classList.add('on');
+            }
         }
 
         // Handle window resize - redraw wires

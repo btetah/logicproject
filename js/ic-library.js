@@ -1,5 +1,7 @@
 /* ============================================
    IC Library - 74xx Series IC Definitions
+   DTK02 Kit includes: 7400, 7402, 7404, 7408,
+   7432, 7486, 7447, 7490, 7495, 74107 (×2)
    ============================================ */
 
 /**
@@ -263,61 +265,6 @@ var ICLibrary = {
         }
     },
 
-    /* 7474 - Dual D Flip-Flop with Preset and Clear */
-    '7474': {
-        name: '7474',
-        description: 'Dual D Flip-Flop',
-        pins: 14,
-        pinout: [
-            { pin: 1,  name: '1CLR', type: 'input' },
-            { pin: 2,  name: '1D',   type: 'input' },
-            { pin: 3,  name: '1CLK', type: 'input' },
-            { pin: 4,  name: '1PRE', type: 'input' },
-            { pin: 5,  name: '1Q',   type: 'output' },
-            { pin: 6,  name: '1Q\'', type: 'output' },
-            { pin: 7,  name: 'GND',  type: 'power' },
-            { pin: 8,  name: '2Q\'', type: 'output' },
-            { pin: 9,  name: '2Q',   type: 'output' },
-            { pin: 10, name: '2PRE', type: 'input' },
-            { pin: 11, name: '2CLK', type: 'input' },
-            { pin: 12, name: '2D',   type: 'input' },
-            { pin: 13, name: '2CLR', type: 'input' },
-            { pin: 14, name: 'VCC',  type: 'power' }
-        ],
-        _state: { q1: 0, q2: 0, prevClk1: 0, prevClk2: 0 },
-        simulate: function(pins) {
-            var state = this._state;
-
-            // Flip-flop 1: CLR(1), D(2), CLK(3), PRE(4), Q(5), Q'(6)
-            // Active-low preset and clear
-            if (!pins[1]) {
-                state.q1 = 0;  // Clear
-            } else if (!pins[4]) {
-                state.q1 = 1;  // Preset
-            } else if (pins[3] && !state.prevClk1) {
-                // Rising edge
-                state.q1 = pins[2] ? 1 : 0;
-            }
-            state.prevClk1 = pins[3];
-            pins[5] = state.q1;
-            pins[6] = state.q1 ? 0 : 1;
-
-            // Flip-flop 2: CLR(13), D(12), CLK(11), PRE(10), Q(9), Q'(8)
-            if (!pins[13]) {
-                state.q2 = 0;
-            } else if (!pins[10]) {
-                state.q2 = 1;
-            } else if (pins[11] && !state.prevClk2) {
-                state.q2 = pins[12] ? 1 : 0;
-            }
-            state.prevClk2 = pins[11];
-            pins[9] = state.q2;
-            pins[8] = state.q2 ? 0 : 1;
-
-            return pins;
-        }
-    },
-
     /* 7490 - Decade Counter (BCD) */
     '7490': {
         name: '7490',
@@ -373,205 +320,128 @@ var ICLibrary = {
         }
     },
 
-    /* 74138 - 3-to-8 Line Decoder/Demultiplexer */
-    '74138': {
-        name: '74138',
-        description: '3-to-8 Decoder',
-        pins: 16,
-        pinout: [
-            { pin: 1,  name: 'A',   type: 'input' },
-            { pin: 2,  name: 'B',   type: 'input' },
-            { pin: 3,  name: 'C',   type: 'input' },
-            { pin: 4,  name: 'G2A', type: 'input' },
-            { pin: 5,  name: 'G2B', type: 'input' },
-            { pin: 6,  name: 'G1',  type: 'input' },
-            { pin: 7,  name: 'Y7',  type: 'output' },
-            { pin: 8,  name: 'GND', type: 'power' },
-            { pin: 9,  name: 'Y6',  type: 'output' },
-            { pin: 10, name: 'Y5',  type: 'output' },
-            { pin: 11, name: 'Y4',  type: 'output' },
-            { pin: 12, name: 'Y3',  type: 'output' },
-            { pin: 13, name: 'Y2',  type: 'output' },
-            { pin: 14, name: 'Y1',  type: 'output' },
-            { pin: 15, name: 'Y0',  type: 'output' },
-            { pin: 16, name: 'VCC', type: 'power' }
-        ],
-        simulate: function(pins) {
-            // Enable: G1=HIGH, G2A=LOW, G2B=LOW
-            var enabled = pins[6] && !pins[4] && !pins[5];
-            var addr = (pins[1] ? 1 : 0) | ((pins[2] ? 1 : 0) << 1) | ((pins[3] ? 1 : 0) << 2);
-
-            // All outputs HIGH (inactive) by default (active LOW outputs)
-            var outputPins = [15, 14, 13, 12, 11, 10, 9, 7]; // Y0-Y7
-            for (var i = 0; i < 8; i++) {
-                pins[outputPins[i]] = (enabled && i === addr) ? 0 : 1;
-            }
-
-            return pins;
-        }
-    },
-
-    /* 74151 - 8-to-1 Multiplexer */
-    '74151': {
-        name: '74151',
-        description: '8-to-1 Multiplexer',
-        pins: 16,
-        pinout: [
-            { pin: 1,  name: 'D3',   type: 'input' },
-            { pin: 2,  name: 'D2',   type: 'input' },
-            { pin: 3,  name: 'D1',   type: 'input' },
-            { pin: 4,  name: 'D0',   type: 'input' },
-            { pin: 5,  name: 'Y',    type: 'output' },
-            { pin: 6,  name: 'W',    type: 'output' },
-            { pin: 7,  name: 'G',    type: 'input' },
-            { pin: 8,  name: 'GND',  type: 'power' },
-            { pin: 9,  name: 'C',    type: 'input' },
-            { pin: 10, name: 'B',    type: 'input' },
-            { pin: 11, name: 'A',    type: 'input' },
-            { pin: 12, name: 'D7',   type: 'input' },
-            { pin: 13, name: 'D6',   type: 'input' },
-            { pin: 14, name: 'D5',   type: 'input' },
-            { pin: 15, name: 'D4',   type: 'input' },
-            { pin: 16, name: 'VCC',  type: 'power' }
-        ],
-        simulate: function(pins) {
-            var enabled = !pins[7];  // G active LOW
-            var addr = (pins[11] ? 1 : 0) | ((pins[10] ? 1 : 0) << 1) | ((pins[9] ? 1 : 0) << 2);
-            var dataPins = [4, 3, 2, 1, 15, 14, 13, 12]; // D0-D7
-
-            if (enabled) {
-                var selected = pins[dataPins[addr]] ? 1 : 0;
-                pins[5] = selected;     // Y
-                pins[6] = selected ? 0 : 1;  // W (complement)
-            } else {
-                pins[5] = 0;
-                pins[6] = 1;
-            }
-
-            return pins;
-        }
-    },
-
-    /* 74161 - 4-bit Synchronous Binary Counter */
-    '74161': {
-        name: '74161',
-        description: '4-bit Binary Counter',
-        pins: 16,
-        pinout: [
-            { pin: 1,  name: 'CLR',  type: 'input' },
-            { pin: 2,  name: 'CLK',  type: 'input' },
-            { pin: 3,  name: 'A',    type: 'input' },
-            { pin: 4,  name: 'B',    type: 'input' },
-            { pin: 5,  name: 'C',    type: 'input' },
-            { pin: 6,  name: 'D',    type: 'input' },
-            { pin: 7,  name: 'ENP',  type: 'input' },
-            { pin: 8,  name: 'GND',  type: 'power' },
-            { pin: 9,  name: 'LOAD', type: 'input' },
-            { pin: 10, name: 'ENT',  type: 'input' },
-            { pin: 11, name: 'QD',   type: 'output' },
-            { pin: 12, name: 'QC',   type: 'output' },
-            { pin: 13, name: 'QB',   type: 'output' },
-            { pin: 14, name: 'QA',   type: 'output' },
-            { pin: 15, name: 'RCO',  type: 'output' },
-            { pin: 16, name: 'VCC',  type: 'power' }
-        ],
-        _state: { count: 0, prevClk: 0 },
-        simulate: function(pins) {
-            var state = this._state;
-
-            if (!pins[1]) {
-                // Asynchronous clear (active LOW)
-                state.count = 0;
-            } else if (pins[2] && !state.prevClk) {
-                // Rising edge of clock
-                if (!pins[9]) {
-                    // Load (active LOW)
-                    state.count = (pins[3] ? 1 : 0) |
-                                  ((pins[4] ? 1 : 0) << 1) |
-                                  ((pins[5] ? 1 : 0) << 2) |
-                                  ((pins[6] ? 1 : 0) << 3);
-                } else if (pins[7] && pins[10]) {
-                    // Count (both enables HIGH)
-                    state.count = (state.count + 1) & 0xF;
-                }
-            }
-
-            state.prevClk = pins[2];
-
-            pins[14] = (state.count & 1) ? 1 : 0;   // QA
-            pins[13] = (state.count & 2) ? 1 : 0;   // QB
-            pins[12] = (state.count & 4) ? 1 : 0;   // QC
-            pins[11] = (state.count & 8) ? 1 : 0;   // QD
-            pins[15] = (state.count === 15 && pins[10]) ? 1 : 0; // RCO
-
-            return pins;
-        }
-    },
-
-    /* 74195 - 4-bit Parallel-Access Shift Register */
-    '74195': {
-        name: '74195',
+    /* 7495 - 4-bit Parallel-Access Shift Register */
+    '7495': {
+        name: '7495',
         description: '4-bit Shift Register',
-        pins: 16,
+        pins: 14,
         pinout: [
-            { pin: 1,  name: 'CLR',   type: 'input' },
-            { pin: 2,  name: 'J',     type: 'input' },
-            { pin: 3,  name: 'K\'',   type: 'input' },
-            { pin: 4,  name: 'A',     type: 'input' },
-            { pin: 5,  name: 'B',     type: 'input' },
-            { pin: 6,  name: 'C',     type: 'input' },
-            { pin: 7,  name: 'D',     type: 'input' },
-            { pin: 8,  name: 'GND',   type: 'power' },
-            { pin: 9,  name: 'SH/LD', type: 'input' },
-            { pin: 10, name: 'CLK',   type: 'input' },
-            { pin: 11, name: 'QD',    type: 'output' },
-            { pin: 12, name: 'QD\'',  type: 'output' },
-            { pin: 13, name: 'QC',    type: 'output' },
-            { pin: 14, name: 'QB',    type: 'output' },
-            { pin: 15, name: 'QA',    type: 'output' },
-            { pin: 16, name: 'VCC',   type: 'power' }
+            { pin: 1,  name: 'SER',   type: 'input' },
+            { pin: 2,  name: 'A',     type: 'input' },
+            { pin: 3,  name: 'B',     type: 'input' },
+            { pin: 4,  name: 'C',     type: 'input' },
+            { pin: 5,  name: 'D',     type: 'input' },
+            { pin: 6,  name: 'MODE',  type: 'input' },
+            { pin: 7,  name: 'GND',   type: 'power' },
+            { pin: 8,  name: 'CLK2',  type: 'input' },
+            { pin: 9,  name: 'CLK1',  type: 'input' },
+            { pin: 10, name: 'QD',    type: 'output' },
+            { pin: 11, name: 'QC',    type: 'output' },
+            { pin: 12, name: 'QB',    type: 'output' },
+            { pin: 13, name: 'QA',    type: 'output' },
+            { pin: 14, name: 'VCC',   type: 'power' }
         ],
-        _state: { qa: 0, qb: 0, qc: 0, qd: 0, prevClk: 0 },
+        _state: { qa: 0, qb: 0, qc: 0, qd: 0, prevClk1: 0, prevClk2: 0 },
         simulate: function(pins) {
             var state = this._state;
+            var mode = pins[6] ? 1 : 0; // MODE: 0=shift right, 1=parallel load
 
-            if (!pins[1]) {
-                // Clear (active LOW)
-                state.qa = state.qb = state.qc = state.qd = 0;
-            } else if (pins[10] && !state.prevClk) {
-                // Rising edge
-                if (!pins[9]) {
-                    // Parallel load
-                    state.qa = pins[4] ? 1 : 0;
-                    state.qb = pins[5] ? 1 : 0;
-                    state.qc = pins[6] ? 1 : 0;
-                    state.qd = pins[7] ? 1 : 0;
-                } else {
-                    // Shift right
-                    var serialIn;
-                    if (pins[2] && !pins[3]) {
-                        serialIn = 0;
-                    } else if (!pins[2] && pins[3]) {
-                        serialIn = 1;
-                    } else if (pins[2] && pins[3]) {
-                        serialIn = 1; // J=1, K'=1 -> toggle, simplified
-                    } else {
-                        serialIn = 0; // J=0, K'=0 -> set 0
-                    }
+            if (mode === 0) {
+                // Shift right mode - clocked by CLK1 (pin 9)
+                var clk1Edge = pins[9] && !state.prevClk1; // rising edge
+                if (clk1Edge) {
                     state.qd = state.qc;
                     state.qc = state.qb;
                     state.qb = state.qa;
-                    state.qa = serialIn;
+                    state.qa = pins[1] ? 1 : 0; // Serial input
+                }
+            } else {
+                // Parallel load mode - clocked by CLK2 (pin 8)
+                var clk2Edge = pins[8] && !state.prevClk2; // rising edge
+                if (clk2Edge) {
+                    state.qa = pins[2] ? 1 : 0; // A
+                    state.qb = pins[3] ? 1 : 0; // B
+                    state.qc = pins[4] ? 1 : 0; // C
+                    state.qd = pins[5] ? 1 : 0; // D
                 }
             }
 
-            state.prevClk = pins[10];
+            state.prevClk1 = pins[9];
+            state.prevClk2 = pins[8];
 
-            pins[15] = state.qa;
-            pins[14] = state.qb;
-            pins[13] = state.qc;
-            pins[11] = state.qd;
-            pins[12] = state.qd ? 0 : 1; // QD'
+            pins[13] = state.qa;
+            pins[12] = state.qb;
+            pins[11] = state.qc;
+            pins[10] = state.qd;
+
+            return pins;
+        }
+    },
+
+    /* 74107 - Dual J-K Flip-Flop with Clear */
+    '74107': {
+        name: '74107',
+        description: 'Dual J-K Flip-Flop',
+        pins: 14,
+        pinout: [
+            { pin: 1,  name: '1J',   type: 'input' },
+            { pin: 2,  name: '1Q\'', type: 'output' },
+            { pin: 3,  name: '1Q',   type: 'output' },
+            { pin: 4,  name: '1K',   type: 'input' },
+            { pin: 5,  name: '2Q',   type: 'output' },
+            { pin: 6,  name: '2Q\'', type: 'output' },
+            { pin: 7,  name: 'GND',  type: 'power' },
+            { pin: 8,  name: '2J',   type: 'input' },
+            { pin: 9,  name: '2CLK', type: 'input' },
+            { pin: 10, name: '2CLR', type: 'input' },
+            { pin: 11, name: '2K',   type: 'input' },
+            { pin: 12, name: '1CLK', type: 'input' },
+            { pin: 13, name: '1CLR', type: 'input' },
+            { pin: 14, name: 'VCC',  type: 'power' }
+        ],
+        _state: { q1: 0, q2: 0, prevClk1: 0, prevClk2: 0 },
+        simulate: function(pins) {
+            var state = this._state;
+
+            // Flip-flop 1: J(1), K(4), CLK(12), CLR(13), Q(3), Q'(2)
+            // CLR is active LOW
+            if (!pins[13]) {
+                state.q1 = 0; // Clear
+            } else if (!pins[12] && state.prevClk1) {
+                // Falling edge of clock (74107 triggers on falling edge)
+                var j1 = pins[1] ? 1 : 0;
+                var k1 = pins[4] ? 1 : 0;
+                if (j1 && !k1) {
+                    state.q1 = 1;        // Set
+                } else if (!j1 && k1) {
+                    state.q1 = 0;        // Reset
+                } else if (j1 && k1) {
+                    state.q1 = state.q1 ? 0 : 1; // Toggle
+                }
+                // J=0, K=0: hold (no change)
+            }
+            state.prevClk1 = pins[12];
+            pins[3] = state.q1;
+            pins[2] = state.q1 ? 0 : 1;
+
+            // Flip-flop 2: J(8), K(11), CLK(9), CLR(10), Q(5), Q'(6)
+            if (!pins[10]) {
+                state.q2 = 0; // Clear
+            } else if (!pins[9] && state.prevClk2) {
+                // Falling edge
+                var j2 = pins[8] ? 1 : 0;
+                var k2 = pins[11] ? 1 : 0;
+                if (j2 && !k2) {
+                    state.q2 = 1;
+                } else if (!j2 && k2) {
+                    state.q2 = 0;
+                } else if (j2 && k2) {
+                    state.q2 = state.q2 ? 0 : 1;
+                }
+            }
+            state.prevClk2 = pins[9];
+            pins[5] = state.q2;
+            pins[6] = state.q2 ? 0 : 1;
 
             return pins;
         }

@@ -214,7 +214,7 @@ var Simulator = (function() {
     function updateSevenSegments(signals) {
         // Seven-segment displays can be driven directly by signals named
         // 'seg-0-a' through 'seg-0-g' etc, or by connecting IC outputs
-        for (var d = 0; d < 2; d++) {
+        for (var d = 0; d < 3; d++) {
             var segs = { a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0, dp: 0 };
             var segNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'dp'];
             for (var s = 0; s < segNames.length; s++) {
@@ -271,9 +271,24 @@ var Simulator = (function() {
     }
 
     /**
-     * Pulse generator - single pulse
+     * Pulse generator - Low to High transition (bounceless)
      */
     function pulse() {
+        if (!powerOn) return;
+        clockState = 0;
+        updateClockLED();
+        simulate();
+        setTimeout(function() {
+            clockState = 1;
+            updateClockLED();
+            simulate();
+        }, 50);
+    }
+
+    /**
+     * Pulse generator - High to Low transition (bounceless)
+     */
+    function pulseHigh() {
         if (!powerOn) return;
         clockState = 1;
         updateClockLED();
@@ -283,6 +298,44 @@ var Simulator = (function() {
             updateClockLED();
             simulate();
         }, 50);
+    }
+
+    /**
+     * Logic probe - read value of a connection point
+     */
+    function probeValue(connId) {
+        if (!powerOn) return -1; // tri-state when off
+        var ics = Breadboard.getPlacedICs();
+        var signals = {};
+
+        // Build signals
+        setRailSignals(signals, 'top-vcc', 1);
+        setRailSignals(signals, 'top-gnd', 0);
+        setRailSignals(signals, 'bottom-vcc', 1);
+        setRailSignals(signals, 'bottom-gnd', 0);
+
+        var switchStates = Components.getAllSwitchStates();
+        for (var s = 0; s < switchStates.length; s++) {
+            signals['switch-' + s] = switchStates[s];
+        }
+
+        if (clockEnabled) {
+            signals[clockOutputConn] = clockState;
+        }
+
+        var maxPasses = ics.length + 2;
+        for (var pass = 0; pass < maxPasses; pass++) {
+            propagateSignals(signals);
+            for (var i = 0; i < ics.length; i++) {
+                simulateIC(ics[i], signals);
+            }
+        }
+        propagateSignals(signals);
+
+        if (signals[connId] !== undefined) {
+            return signals[connId]; // 0 or 1
+        }
+        return -1; // tri-state (not connected)
     }
 
     /**
@@ -307,6 +360,8 @@ var Simulator = (function() {
         stopClock: stopClock,
         setClockFrequency: setClockFrequency,
         pulse: pulse,
+        pulseHigh: pulseHigh,
+        probeValue: probeValue,
         setPower: setPower,
         isPowerOn: isPowerOn
     };

@@ -13,7 +13,7 @@ eval(icLibSrc);
 describe('ICLibrary', () => {
     test('should define all expected ICs', () => {
         const expectedICs = ['7400', '7402', '7404', '7408', '7432', '7486',
-                             '7447', '7474', '7490', '74138', '74151', '74161', '74195'];
+                             '7447', '7490', '7495', '74107'];
         expectedICs.forEach(ic => {
             expect(ICLibrary[ic]).toBeDefined();
             expect(ICLibrary[ic].name).toBe(ic);
@@ -180,130 +180,66 @@ describe('ICLibrary', () => {
         });
     });
 
-    describe('7474 - Dual D Flip-Flop', () => {
+    describe('7495 - 4-bit Shift Register', () => {
+        test('should shift right on CLK1 rising edge', () => {
+            const ic = ICLibrary['7495'];
+            ic._state = { qa: 0, qb: 0, qc: 0, qd: 0, prevClk1: 0, prevClk2: 0 };
+
+            // MODE=0 (shift right), SER=1, CLK1 rising edge
+            ic.simulate({1:1, 6:0, 9:1, 8:0}); // CLK1=1 rising edge
+            expect(ic._state.qa).toBe(1); // Serial input shifted in
+            expect(ic._state.qb).toBe(0);
+        });
+
+        test('should parallel load on CLK2 rising edge', () => {
+            const ic = ICLibrary['7495'];
+            ic._state = { qa: 0, qb: 0, qc: 0, qd: 0, prevClk1: 0, prevClk2: 0 };
+
+            // MODE=1 (parallel load), A=1, B=0, C=1, D=1, CLK2 rising edge
+            const pins = ic.simulate({2:1, 3:0, 4:1, 5:1, 6:1, 8:1, 9:0});
+            expect(pins[13]).toBe(1); // QA = A
+            expect(pins[12]).toBe(0); // QB = B
+            expect(pins[11]).toBe(1); // QC = C
+            expect(pins[10]).toBe(1); // QD = D
+        });
+
+        test('has 14 pins', () => {
+            expect(ICLibrary['7495'].pins).toBe(14);
+        });
+    });
+
+    describe('74107 - Dual J-K Flip-Flop', () => {
         test('should clear on active-low CLR', () => {
-            const ic = ICLibrary['7474'];
-            // Reset state
-            ic._state = { q1: 0, q2: 0, prevClk1: 0, prevClk2: 0 };
+            const ic = ICLibrary['74107'];
+            ic._state = { q1: 1, q2: 0, prevClk1: 0, prevClk2: 0 };
 
-            // CLR=0 (active), PRE=1, D=1, CLK=0
-            const pins = ic.simulate({1:0, 2:1, 3:0, 4:1});
-            expect(pins[5]).toBe(0);  // Q = 0
-            expect(pins[6]).toBe(1);  // Q' = 1
+            // CLR1=0 (active low), J=1, K=0, CLK=0
+            const pins = ic.simulate({1:1, 4:0, 12:0, 13:0, 8:0, 11:0, 9:0, 10:1});
+            expect(pins[3]).toBe(0);  // Q1 = 0 (cleared)
+            expect(pins[2]).toBe(1);  // Q1' = 1
         });
 
-        test('should preset on active-low PRE', () => {
-            const ic = ICLibrary['7474'];
-            ic._state = { q1: 0, q2: 0, prevClk1: 0, prevClk2: 0 };
+        test('should set on falling edge with J=1, K=0', () => {
+            const ic = ICLibrary['74107'];
+            ic._state = { q1: 0, q2: 0, prevClk1: 1, prevClk2: 0 };
 
-            // CLR=1, PRE=0 (active), D=0, CLK=0
-            const pins = ic.simulate({1:1, 2:0, 3:0, 4:0});
-            expect(pins[5]).toBe(1);  // Q = 1
-            expect(pins[6]).toBe(0);  // Q' = 0
+            // CLR1=1, J=1, K=0, CLK falling edge (1→0)
+            const pins = ic.simulate({1:1, 4:0, 12:0, 13:1, 8:0, 11:0, 9:0, 10:1});
+            expect(pins[3]).toBe(1);  // Q1 = 1 (set)
+            expect(pins[2]).toBe(0);  // Q1' = 0
         });
 
-        test('should latch D on rising edge', () => {
-            const ic = ICLibrary['7474'];
-            ic._state = { q1: 0, q2: 0, prevClk1: 0, prevClk2: 0 };
+        test('should toggle on falling edge with J=1, K=1', () => {
+            const ic = ICLibrary['74107'];
+            ic._state = { q1: 0, q2: 0, prevClk1: 1, prevClk2: 0 };
 
-            // Set D=1, CLK rising edge (0->1), CLR=1, PRE=1
-            ic.simulate({1:1, 2:1, 3:0, 4:1}); // CLK=0 first
-            const pins = ic.simulate({1:1, 2:1, 3:1, 4:1}); // CLK=1 rising edge
-            expect(pins[5]).toBe(1);  // Q = D = 1
-            expect(pins[6]).toBe(0);  // Q' = 0
-        });
-    });
-
-    describe('74138 - 3-to-8 Line Decoder', () => {
-        test('should select Y0 when A=B=C=0 and enabled', () => {
-            const ic = ICLibrary['74138'];
-            // Enable: G1=1, G2A=0, G2B=0; Address: A=0, B=0, C=0
-            const pins = ic.simulate({1:0, 2:0, 3:0, 4:0, 5:0, 6:1});
-            expect(pins[15]).toBe(0); // Y0 active (LOW)
-            expect(pins[14]).toBe(1); // Y1 inactive
-            expect(pins[13]).toBe(1); // Y2 inactive
-            expect(pins[12]).toBe(1); // Y3 inactive
+            // CLR1=1, J=1, K=1, CLK falling edge
+            const pins = ic.simulate({1:1, 4:1, 12:0, 13:1, 8:0, 11:0, 9:0, 10:1});
+            expect(pins[3]).toBe(1);  // Q1 toggled to 1
         });
 
-        test('should select Y5 when A=1, B=0, C=1 and enabled', () => {
-            const ic = ICLibrary['74138'];
-            const pins = ic.simulate({1:1, 2:0, 3:1, 4:0, 5:0, 6:1});
-            expect(pins[15]).toBe(1); // Y0 inactive
-            expect(pins[10]).toBe(0); // Y5 active (LOW)
-        });
-
-        test('all outputs HIGH when disabled', () => {
-            const ic = ICLibrary['74138'];
-            // G1=0 (disabled)
-            const pins = ic.simulate({1:0, 2:0, 3:0, 4:0, 5:0, 6:0});
-            expect(pins[15]).toBe(1); // Y0
-            expect(pins[14]).toBe(1); // Y1
-            expect(pins[7]).toBe(1);  // Y7
-        });
-
-        test('has 16 pins', () => {
-            expect(ICLibrary['74138'].pins).toBe(16);
-        });
-    });
-
-    describe('74151 - 8-to-1 Multiplexer', () => {
-        test('should select D0 when address is 0', () => {
-            const ic = ICLibrary['74151'];
-            // G=0 (enabled), A=0, B=0, C=0 → select D0 (pin 4)
-            const pins = ic.simulate({4:1, 7:0, 11:0, 10:0, 9:0}); // D0=1
-            expect(pins[5]).toBe(1); // Y
-            expect(pins[6]).toBe(0); // W (complement)
-        });
-
-        test('should select D3 when address is 3', () => {
-            const ic = ICLibrary['74151'];
-            // G=0, A=1, B=1, C=0 → select D3 (pin 1)
-            const pins = ic.simulate({1:1, 7:0, 11:1, 10:1, 9:0}); // D3=1
-            expect(pins[5]).toBe(1); // Y
-        });
-
-        test('should output 0 when disabled', () => {
-            const ic = ICLibrary['74151'];
-            // G=1 (disabled)
-            const pins = ic.simulate({4:1, 7:1, 11:0, 10:0, 9:0});
-            expect(pins[5]).toBe(0); // Y
-            expect(pins[6]).toBe(1); // W
-        });
-    });
-
-    describe('74161 - 4-bit Binary Counter', () => {
-        test('should clear to 0', () => {
-            const ic = ICLibrary['74161'];
-            ic._state = { count: 5, prevClk: 0 };
-
-            // CLR=0 (active low)
-            const pins = ic.simulate({1:0, 2:0, 7:1, 9:1, 10:1});
-            expect(pins[14]).toBe(0); // QA
-            expect(pins[13]).toBe(0); // QB
-            expect(pins[12]).toBe(0); // QC
-            expect(pins[11]).toBe(0); // QD
-        });
-
-        test('should count on rising edge when enabled', () => {
-            const ic = ICLibrary['74161'];
-            ic._state = { count: 0, prevClk: 0 };
-
-            // CLR=1, LOAD=1, ENP=1, ENT=1, CLK=1 (rising edge from 0)
-            ic.simulate({1:1, 2:1, 7:1, 9:1, 10:1});
-            expect(ic._state.count).toBe(1);
-        });
-
-        test('should wrap from 15 to 0', () => {
-            const ic = ICLibrary['74161'];
-            ic._state = { count: 15, prevClk: 0 };
-
-            const pins = ic.simulate({1:1, 2:1, 7:1, 9:1, 10:1});
-            expect(ic._state.count).toBe(0);
-            // QA-QD should be 0
-            expect(pins[14]).toBe(0);
-            expect(pins[13]).toBe(0);
-            expect(pins[12]).toBe(0);
-            expect(pins[11]).toBe(0);
+        test('has 14 pins', () => {
+            expect(ICLibrary['74107'].pins).toBe(14);
         });
     });
 

@@ -6,9 +6,9 @@
 var Breadboard = (function() {
     'use strict';
 
-    var ROWS = 30;       // Number of rows per side
+    var ROWS = 63;       // Number of rows per side (630 tie points)
     var COLS = 5;        // 5 columns per side (a-e, f-j)
-    var RAIL_HOLES = 30; // Power rail holes
+    var RAIL_HOLES = 50; // Power rail holes (100 tie points per distribution strip)
 
     var wires = [];          // Array of wire connections
     var placedICs = [];      // Array of placed ICs

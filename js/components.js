@@ -6,11 +6,12 @@
 var Components = (function() {
     'use strict';
 
-    var NUM_SWITCHES = 8;
-    var NUM_LEDS = 8;
+    var NUM_SWITCHES = 10;
+    var NUM_LEDS = 10;
 
     /**
-     * Initialize logic input switches (S0-S7)
+     * Initialize logic input switches (S0-S9)
+     * Each switch has LED indication for both logic high and low
      */
     function initSwitches(container, onToggle) {
         container.innerHTML = '';
@@ -19,9 +20,11 @@ var Components = (function() {
             switchDiv.className = 'logic-switch';
             switchDiv.innerHTML =
                 '<span class="switch-label">S' + i + '</span>' +
+                '<div class="switch-led-low on" data-switch-led-low="' + i + '" title="LOW"></div>' +
                 '<div class="toggle-switch" data-switch="' + i + '" data-state="off">' +
                     '<div class="toggle-track"><div class="toggle-thumb"></div></div>' +
                 '</div>' +
+                '<div class="switch-led-high" data-switch-led-high="' + i + '" title="HIGH"></div>' +
                 '<span class="switch-state low" data-switch-state="' + i + '">0</span>' +
                 '<div class="switch-output-point" data-conn="switch-' + i + '" title="S' + i + ' output"></div>';
             container.appendChild(switchDiv);
@@ -33,14 +36,20 @@ var Components = (function() {
                     toggle.setAttribute('data-state', newState);
                     var stateSpan = document.querySelector('[data-switch-state="' + index + '"]');
                     var outputPoint = switchDiv.querySelector('.switch-output-point');
+                    var ledLow = document.querySelector('[data-switch-led-low="' + index + '"]');
+                    var ledHigh = document.querySelector('[data-switch-led-high="' + index + '"]');
                     if (newState === 'on') {
                         stateSpan.textContent = '1';
                         stateSpan.className = 'switch-state high';
                         outputPoint.classList.add('high');
+                        if (ledHigh) ledHigh.classList.add('on');
+                        if (ledLow) ledLow.classList.remove('on');
                     } else {
                         stateSpan.textContent = '0';
                         stateSpan.className = 'switch-state low';
                         outputPoint.classList.remove('high');
+                        if (ledHigh) ledHigh.classList.remove('on');
+                        if (ledLow) ledLow.classList.add('on');
                     }
                     if (onToggle) {
                         onToggle(index, newState === 'on' ? 1 : 0);
@@ -165,6 +174,7 @@ var Components = (function() {
         var blank = { a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0, dp: 0 };
         setSevenSegment(0, blank);
         setSevenSegment(1, blank);
+        setSevenSegment(2, blank);
     }
 
     /**

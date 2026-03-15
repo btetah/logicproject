@@ -43,21 +43,33 @@ describe('Components', () => {
                     <circle data-seg="dp" class="segment"/>
                 </svg>
             </div>
+            <div class="seven-seg-display" id="seg-display-2">
+                <svg viewBox="0 0 60 100" class="seg-svg">
+                    <polygon data-seg="a" class="segment"/>
+                    <polygon data-seg="b" class="segment"/>
+                    <polygon data-seg="c" class="segment"/>
+                    <polygon data-seg="d" class="segment"/>
+                    <polygon data-seg="e" class="segment"/>
+                    <polygon data-seg="f" class="segment"/>
+                    <polygon data-seg="g" class="segment"/>
+                    <circle data-seg="dp" class="segment"/>
+                </svg>
+            </div>
         `;
     });
 
     describe('initSwitches', () => {
-        test('should create 8 logic switches', () => {
+        test('should create 10 logic switches', () => {
             const container = document.getElementById('switches-container');
             Components.initSwitches(container, function() {});
             const switches = container.querySelectorAll('.logic-switch');
-            expect(switches.length).toBe(8);
+            expect(switches.length).toBe(10);
         });
 
         test('switches should start in OFF state', () => {
             const container = document.getElementById('switches-container');
             Components.initSwitches(container, function() {});
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 10; i++) {
                 expect(Components.getSwitchState(i)).toBe(0);
             }
         });
@@ -78,14 +90,32 @@ describe('Components', () => {
             expect(Components.getSwitchState(0)).toBe(0);
             expect(lastToggle).toEqual({ index: 0, value: 0 });
         });
+
+        test('should show HIGH LED when switch is ON', () => {
+            const container = document.getElementById('switches-container');
+            Components.initSwitches(container, function() {});
+            const toggle = document.querySelector('[data-switch="0"]');
+            toggle.click();
+            const ledHigh = document.querySelector('[data-switch-led-high="0"]');
+            const ledLow = document.querySelector('[data-switch-led-low="0"]');
+            expect(ledHigh.classList.contains('on')).toBe(true);
+            expect(ledLow.classList.contains('on')).toBe(false);
+        });
+
+        test('should show LOW LED when switch is OFF', () => {
+            const container = document.getElementById('switches-container');
+            Components.initSwitches(container, function() {});
+            const ledLow = document.querySelector('[data-switch-led-low="0"]');
+            expect(ledLow.classList.contains('on')).toBe(true);
+        });
     });
 
     describe('initLEDs', () => {
-        test('should create 8 LEDs', () => {
+        test('should create 10 LEDs', () => {
             const container = document.getElementById('leds-container');
             Components.initLEDs(container);
             const leds = container.querySelectorAll('.logic-led');
-            expect(leds.length).toBe(8);
+            expect(leds.length).toBe(10);
         });
 
         test('should set LED on and off', () => {
@@ -103,11 +133,11 @@ describe('Components', () => {
     });
 
     describe('getAllSwitchStates', () => {
-        test('should return array of 8 values', () => {
+        test('should return array of 10 values', () => {
             const container = document.getElementById('switches-container');
             Components.initSwitches(container, function() {});
             const states = Components.getAllSwitchStates();
-            expect(states.length).toBe(8);
+            expect(states.length).toBe(10);
             expect(states.every(s => s === 0)).toBe(true);
         });
     });
